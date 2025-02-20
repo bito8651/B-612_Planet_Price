@@ -2,8 +2,8 @@
    載入芫荽體字型 (使用 TTF 檔案)
    --------------------------- */
    @font-face {
-    font-family: '芫荽體';
-    src: url('fonts/Iansui-Regular.ttf') format('truetype');
+    font-family: 'Iansui';
+    src: url('/static/fonts/Iansui-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

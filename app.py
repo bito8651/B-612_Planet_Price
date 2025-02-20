@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", template_folder="templates")
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:8000"}})  # 啟用跨域支援
 
 def scrape_exchange_rate():
@@ -31,10 +31,12 @@ def scrape_exchange_rate():
     driver.quit()
     return exchange_rate
 
+# ✅ 讓 Flask 正確讀取 `templates/index.html`
 @app.route('/')
 def home():
-    return "🚀 Flask 應用成功運行！請使用 /api/exchange-rate 來獲取匯率數據。"
+    return render_template("index.html")  # Flask 會從 `templates/` 找 `index.html`
 
+# ✅ API 端點
 @app.route('/api/exchange-rate')
 def get_exchange_rate():
     try:
@@ -45,5 +47,5 @@ def get_exchange_rate():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # 讓 Render 自動設定 PORT，預設為 5000
+    port = int(os.environ.get('PORT', 10000))  # 改成 10000
     app.run(host='0.0.0.0', port=port)
