@@ -1,3 +1,5 @@
+const API_URL = 'http://127.0.0.1:10000/api/exchange-rate';  // ✅ 確保這個 Port 正確
+
 document.getElementById("convertBtn").addEventListener("click", async function() {
     // 取得使用者輸入的金額，並轉為數字格式
     const amountInput = document.getElementById("amount").value;
@@ -13,7 +15,7 @@ document.getElementById("convertBtn").addEventListener("click", async function()
     
     try {
         // 呼叫後端 API 取得最新匯率
-        const response = await fetch('http://127.0.0.1:5000/api/exchange-rate');
+        const response = await fetch(API_URL);
         const data = await response.json();
         
         if (data.exchange_rate) {
@@ -48,5 +50,6 @@ document.getElementById("convertBtn").addEventListener("click", async function()
         }
     } catch (error) {
         document.getElementById("result").innerText = "獲取匯率出錯";
+        console.error("API 請求錯誤:", error); // ✅ 顯示錯誤訊息在 Console
     }
 });
