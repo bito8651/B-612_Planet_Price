@@ -1,30 +1,52 @@
+import os
+import subprocess
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-import os
+
+# ✅ Render 環境變數
+CHROME_PATH = "/usr/bin/google-chrome"
+CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 CORS(app, resources={r"/*": {"origins": "*"}})  # ✅ 允許所有來源的 CORS 請求
 
+def install_chrome():
+    """ ✅ Render 環境無法使用 apt-get install，因此手動下載 Chrome 和 Chromedriver """
+    if not os.path.exists(CHROME_PATH) or not os.path.exists(CHROMEDRIVER_PATH):
+        try:
+            print("🔹 安裝 Google Chrome & Chromedriver...")
+            subprocess.run("wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb", shell=True, check=True)
+            subprocess.run("dpkg -i google-chrome-stable_current_amd64.deb || true", shell=True, check=True)
+            subprocess.run("rm google-chrome-stable_current_amd64.deb", shell=True, check=True)
+            subprocess.run("wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip", shell=True, check=True)
+            subprocess.run("unzip chromedriver_linux64.zip", shell=True, check=True)
+            subprocess.run("mv chromedriver /usr/bin/chromedriver", shell=True, check=True)
+            subprocess.run("chmod +x /usr/bin/chromedriver", shell=True, check=True)
+            print("✅ 安裝完成！")
+        except subprocess.CalledProcessError as e:
+            print("❌ 安裝失敗:", e)
+
+install_chrome()  # ✅ 在 Flask 啟動時安裝 Chrome
+
 def scrape_exchange_rate():
     options = Options()
-    options.add_argument("--headless")  # ✅ 必須啟用 headless，Render 無法顯示 UI
-    options.add_argument("--no-sandbox")  # ✅ 避免 Render 權限錯誤
-    options.add_argument("--disable-dev-shm-usage")  # ✅ 防止 Render 內存不足
-    options.binary_location = "/usr/bin/google-chrome"  # ✅ 使用 Render 預設的 Chrome 位置
+    options.add_argument("--headless")  # ✅ Render 必須使用 headless 模式
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.binary_location = CHROME_PATH  # ✅ 使用 Render 預設的 Chrome 位置
 
-    # ✅ 這裡不使用 `ChromeDriverManager`，改用 Render 內建的 chromedriver
-    driver = webdriver.Chrome(options=options)
+    # ✅ 使用 Render 內建的 chromedriver
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
     driver.get("https://www.huilv.vip/Visa/")
     
-    time.sleep(8)  # ✅ 避免網站尚未載入完成
+    time.sleep(8)
 
     try:
         wait = WebDriverWait(driver, 20)
@@ -34,17 +56,15 @@ def scrape_exchange_rate():
         print(f"獲取匯率成功: {exchange_rate}")  # ✅ 顯示在 Render Logs
     except Exception as e:
         print("Error in scrape_exchange_rate:", e)  # ✅ 顯示錯誤
-        exchange_rate = "N/A"  # 如果出錯，返回 N/A
+        exchange_rate = "N/A"
     
     driver.quit()
     return exchange_rate
 
-# ✅ 讓 Flask 正確讀取 `templates/index.html`
 @app.route('/')
 def home():
-    return render_template("index.html")  # Flask 會從 `templates/` 找 `index.html`
+    return render_template("index.html")
 
-# ✅ API 端點
 @app.route('/api/exchange-rate')
 def get_exchange_rate():
     try:
