@@ -8,6 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:8000"}})  # 啟用跨域支援
@@ -22,7 +23,6 @@ def scrape_exchange_rate():
     try:
         wait = WebDriverWait(driver, 20)
         rate_container = wait.until(EC.presence_of_element_located((By.ID, "tbl_fx_scnytwd")))
-        # 嘗試取得該容器內第一個 span 元素
         rate_element = rate_container.find_element(By.TAG_NAME, "span")
         exchange_rate = rate_element.text.strip()
     except Exception as e:
@@ -30,6 +30,10 @@ def scrape_exchange_rate():
         raise e
     driver.quit()
     return exchange_rate
+
+@app.route('/')
+def home():
+    return "🚀 Flask 應用成功運行！請使用 /api/exchange-rate 來獲取匯率數據。"
 
 @app.route('/api/exchange-rate')
 def get_exchange_rate():
@@ -39,8 +43,6 @@ def get_exchange_rate():
     except Exception as e:
         print("Error in get_exchange_rate:", e)
         return jsonify({'error': str(e)}), 500
-
-import os
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # 讓 Render 自動設定 PORT，預設為 5000
