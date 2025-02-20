@@ -8,8 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 
-# ✅ 使用 Render 內建的 Chrome & Chromedriver
-CHROME_PATH = "/usr/bin/chromium-browser"
+# ✅ Render 內建的 Chromium 路徑
+CHROME_PATH = "/usr/bin/chromium"
 CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
@@ -20,9 +20,9 @@ def scrape_exchange_rate():
     options.add_argument("--headless")  # ✅ Render 必須使用 headless 模式
     options.add_argument("--no-sandbox")  # ✅ 防止權限問題
     options.add_argument("--disable-dev-shm-usage")  # ✅ 防止記憶體錯誤
-    options.binary_location = CHROME_PATH  # ✅ Render 內建的 Chromium 位置
+    options.binary_location = CHROME_PATH  # ✅ 使用 Render 內建的 Chromium 位置
 
-    # ✅ 使用 Render 內建的 chromedriver
+    # ✅ 使用 Render 內建的 Chromedriver
     driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
     driver.get("https://www.huilv.vip/Visa/")
     
