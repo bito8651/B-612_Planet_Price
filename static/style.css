@@ -1,0 +1,141 @@
+/* ---------------------------
+   載入芫荽體字型 (使用 TTF 檔案)
+   --------------------------- */
+   @font-face {
+    font-family: '芫荽體';
+    src: url('fonts/Iansui-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ---------------------------
+   Reset 基本樣式
+   --------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ---------------------------
+   整體頁面設計
+   --------------------------- */
+body {
+    font-family: '芫荽體', sans-serif;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    /* 桌面版背景圖 (建議尺寸至少 1920×1080) */
+    background: url('desktop-background.PNG') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* ---------------------------
+   手機版背景圖 (例如 iPhone，建議尺寸約 1242×2688)
+   --------------------------- */
+@media (max-width: 768px) {
+    body {
+        background: url('mobile-background.PNG') no-repeat center center fixed;
+        background-size: cover;
+    }
+}
+
+/* ---------------------------
+   Header 區塊
+   --------------------------- */
+header {
+    background: linear-gradient(90deg, #feffff, #fefefe);
+    padding: 20px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* 調整 logo 大小 (放大為原本的2倍，原先為100px，現調整為200px) */
+header img {
+    height: 200px;
+    margin-bottom: 10px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+header #subtitle {
+    font-size: 1.5em;
+    opacity: 0.9;
+}
+
+/* ---------------------------
+   說明區塊
+   --------------------------- */
+#description {
+    background-color: #feffff;
+    padding: 15px 20px;
+    border-left: 5px solid #ccc;
+    margin: 20px auto;
+    max-width: 600px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* ---------------------------
+   換算區塊
+   --------------------------- */
+.converter {
+    background-color: #feffff;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.converter label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.converter input[type="number"] {
+    padding: 10px;
+    width: calc(100% - 22px);
+    font-size: 1em;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.converter button {
+    background-color: #feffff;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.converter button:hover {
+    background-color: #f7f7f7;
+}
+
+/* ---------------------------
+   結果顯示區塊
+   --------------------------- */
+#result {
+    background-color: #feffff;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}

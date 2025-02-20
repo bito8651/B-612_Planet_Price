@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B-612代切報價網頁</title>
+    <!-- ✅ 正確載入 CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- ✅ 正確載入 JavaScript（加上 defer，確保 DOM 加載完畢才執行） -->
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <!-- 標題 & Logo -->
+    <header>
+        <!-- ✅ 正確載入 Logo -->
+        <img src="{{ url_for('static', filename='logo.JPG') }}" alt="網站Logo" id="logo">
+        <h1>B-612 Planet中站代切代購</h1>
+        <p id="subtitle">費用換算工具</p>
+    </header>
+
+    <!-- 說明區塊 -->
+    <div id="description">
+        <p>請輸入金額，系統將根據最新匯率計算報價。</p>
+    </div>
+
+    <!-- 換算功能 -->
+    <div class="converter">
+        <label for="amount">請輸入金額：</label>
+        <input type="number" id="amount" placeholder="例如：100">
+        <button id="convertBtn">開始換算</button>
+    </div>
+
+    <!-- 結果顯示 -->
+    <div id="result"></div>
+</body>
+</html>
